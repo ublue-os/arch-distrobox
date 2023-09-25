@@ -1,4 +1,4 @@
-FROM docker.io/library/archlinux:latest AS arch-distrobox
+FROM quay.io/toolbx-images/archlinux-toolbox AS arch-distrobox
 
 # Pacman Initialization
 # Create build user
