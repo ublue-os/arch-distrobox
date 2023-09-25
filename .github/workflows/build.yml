@@ -1,4 +1,4 @@
-name: Build Bazzite-Arch
+name: Build Arch-Distrobox
 on:
   schedule:
     - cron: '20 18 * * *'  # 8:20pm everyday
@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        base_name: [bazzite-arch, bazzite-arch-gnome]
+        base_name: [arch-distrobox]
         include:
           - is_latest_version: true
             is_stable_version: true
