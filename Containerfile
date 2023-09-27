@@ -101,3 +101,37 @@ RUN sed -i 's@#en_US.UTF-8@en_US.UTF-8@g' /etc/locale.gen && \
     rm -rf \
         /tmp/* \
         /var/cache/pacman/pkg/*
+
+FROM arch-distrobox AS arch-distrobox-amdgpupro
+
+# Install amdgpu-pro, remove other drivers
+RUN pacman -R \
+        libglvnd \
+        vulkan-intel \
+        vulkan-radeon \
+        mesa \
+        --noconfirm && \
+    useradd -m --shell=/bin/bash build && usermod -L build && \
+    echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+USER build
+WORKDIR /home/build
+RUN paru -S \
+        amdgpu-pro-oglp \
+        lib32-amdgpu-pro-oglp \
+        vulkan-amdgpu-pro \
+        lib32-vulkan-amdgpu-pro \
+        amf-amdgpu-pro \
+        --noconfirm
+USER root
+WORKDIR /
+
+# Cleanup
+RUN userdel -r build && \
+    rm -drf /home/build && \
+    sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
+    sed -i '/root ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
+    rm -rf \
+        /tmp/* \
+        /var/cache/pacman/pkg/*

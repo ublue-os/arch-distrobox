@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        base_name: [arch-distrobox]
+        base_name: [arch-distrobox, arch-distrobox-amdgpupro]
         include:
           - is_latest_version: true
             is_stable_version: true
