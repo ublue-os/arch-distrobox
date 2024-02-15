@@ -1,4 +1,4 @@
-FROM quay.io/toolbx-images/archlinux-toolbox AS arch-distrobox
+FROM quay.io/toolbx/arch-toolbox AS arch-distrobox
 
 # Pacman Initialization
 # Create build user
