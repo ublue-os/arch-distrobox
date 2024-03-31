@@ -87,7 +87,7 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     cd .. && \
     rm -drf paru-bin && \
     paru -S \
-        aur/xcursor-breeze \
+        aur/xcursor-breeze5 \
         aur/adw-gtk3 \
         --noconfirm
 USER root
