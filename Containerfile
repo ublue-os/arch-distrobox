@@ -16,15 +16,6 @@ RUN sed -i 's/#Color/Color/g' /etc/pacman.conf && \
     echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Distrobox Integration
-USER build
-WORKDIR /home/build
-RUN git clone https://github.com/KyleGospo/xdg-utils-distrobox-arch.git --single-branch && \
-    cd xdg-utils-distrobox-arch/trunk && \
-    makepkg -si --noconfirm && \
-    cd ../.. && \
-    rm -drf xdg-utils-distrobox-arch
-USER root
-WORKDIR /
 RUN git clone https://github.com/89luca89/distrobox.git --single-branch /tmp/distrobox && \
     cp /tmp/distrobox/distrobox-host-exec /usr/bin/distrobox-host-exec && \
     ln -s /usr/bin/distrobox-host-exec /usr/bin/flatpak && \
@@ -87,7 +78,6 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     cd .. && \
     rm -drf paru-bin && \
     paru -S \
-        aur/xcursor-breeze5 \
         aur/adw-gtk3 \
         --noconfirm
 USER root
