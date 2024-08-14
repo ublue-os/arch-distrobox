@@ -26,6 +26,7 @@ RUN git clone https://github.com/89luca89/distrobox.git --single-branch /tmp/dis
 
 # Install packages Distrobox adds automatically, this speeds up first launch
 RUN pacman -S \
+        adw-gtk-theme \
         bash-completion \
         bc \
         curl \
@@ -78,9 +79,9 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     makepkg -si --noconfirm && \
     cd .. && \
     rm -drf paru-bin && \
-    paru -S \
-        aur/adw-gtk3 \
-        --noconfirm
+#    paru -S \
+#        aur/placeholder \
+#        --noconfirm
 USER root
 WORKDIR /
 
