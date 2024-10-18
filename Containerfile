@@ -9,7 +9,8 @@ RUN sed -i 's/#Color/Color/g' /etc/pacman.conf && \
     pacman -Syu --noconfirm && \
     useradd -m --shell=/bin/bash build && usermod -L build && \
     echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    pacman -S --clean --clean
 
 # Distrobox Integration
 RUN git clone https://github.com/89luca89/distrobox.git --single-branch /tmp/distrobox && \
@@ -64,7 +65,8 @@ RUN pacman -S \
         vulkan-intel \
         vte-common \
         vulkan-radeon \
-        --noconfirm
+        --noconfirm && \
+    rm -rf /var/cache/pacman/pkg/*
 
 # Add paru and install AUR packages
 USER build
@@ -86,32 +88,33 @@ RUN sed -i 's@#en_US.UTF-8@en_US.UTF-8@g' /etc/locale.gen && \
     rm -drf /home/build && \
     sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
     sed -i '/root ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
-    rm -rf \
-        /tmp/* \
-        /var/cache/pacman/pkg/*
+    rm -rf /tmp/*
 
 FROM arch-distrobox AS arch-distrobox-amdgpupro
 
 # Install amdgpu-pro, remove other drivers
-RUN pacman -R \
-        libglvnd \
-        vulkan-intel \
-        vulkan-radeon \
-        mesa \
-        --noconfirm && \
-    useradd -m --shell=/bin/bash build && usermod -L build && \
+RUN useradd -m --shell=/bin/bash build && usermod -L build && \
     echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER build
 WORKDIR /home/build
-RUN paru -S \
+RUN paru -R \
+        libglvnd \
+        vulkan-intel \
+        vulkan-radeon \
+        mesa \
+        --noconfirm && \
+    paru -Syu \
         amdgpu-pro-oglp \
         lib32-amdgpu-pro-oglp \
         vulkan-amdgpu-pro \
         lib32-vulkan-amdgpu-pro \
         amf-amdgpu-pro \
-        --noconfirm
+        --noconfirm && \
+    sudo rm -rf /var/cache/pacman/pkg/* && \
+    rm -rf /home/build/.cache/*
+
 USER root
 WORKDIR /
 
